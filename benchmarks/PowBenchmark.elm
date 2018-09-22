@@ -1,4 +1,4 @@
-module PowBenchmark exposing (main, benchmark)
+module PowBenchmark exposing (suite, main)
 
 import Benchmark exposing (..)
 import Benchmark.Runner exposing (BenchmarkProgram, program)
@@ -8,12 +8,12 @@ import BigInt as BI
 
 main : BenchmarkProgram
 main =
-    program benchmark
+    program suite
 
 
-benchmark : Benchmark
-benchmark =
+suite : Benchmark
+suite =
     describe "pow"
-        [ benchmark2 "positive 32-digit to the power 21" BI.pow bigInt (BI.fromInt 21)
-        , benchmark2 "negative 32-digit to the power 21" BI.pow negativeBigInt (BI.fromInt 21)
+        [ benchmark "positive 32-digit to the power 21" (\_ -> BI.pow bigInt (BI.fromInt 21))
+        , benchmark "negative 32-digit to the power 21" (\_ -> BI.pow negativeBigInt (BI.fromInt 21))
         ]

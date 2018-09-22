@@ -1,4 +1,4 @@
-module DivmodBenchmark exposing (main, benchmark)
+module DivmodBenchmark exposing (suite, main)
 
 import Benchmark exposing (..)
 import Benchmark.Runner exposing (BenchmarkProgram, program)
@@ -8,12 +8,12 @@ import BigInt as BI
 
 main : BenchmarkProgram
 main =
-    program benchmark
+    program suite
 
 
-benchmark : Benchmark
-benchmark =
+suite : Benchmark
+suite =
     describe "divmod"
-        [ benchmark2 "one 32-digit number by 2" BI.divmod bigInt (BI.fromInt 2)
-        , benchmark2 "one 32-digit number by itself" BI.divmod bigInt bigInt
+        [ benchmark "one 32-digit number by 2" (\_ -> BI.divmod bigInt (BI.fromInt 2))
+        , benchmark "one 32-digit number by itself" (\_ -> BI.divmod bigInt bigInt)
         ]

@@ -1,4 +1,4 @@
-module CompareBenchmark exposing (main, benchmark)
+module CompareBenchmark exposing (suite, main)
 
 import Benchmark exposing (..)
 import Benchmark.Runner exposing (BenchmarkProgram, program)
@@ -8,12 +8,12 @@ import BigInt as BI
 
 main : BenchmarkProgram
 main =
-    program benchmark
+    program suite
 
 
-benchmark : Benchmark
-benchmark =
+suite : Benchmark
+suite =
     describe "compare"
-        [ benchmark2 "one 32-digit number with itself" BI.compare bigInt bigInt
-        , benchmark2 "one positive and one negative 32-digit number" BI.compare bigInt negativeBigInt
+        [ benchmark "one 32-digit number with itself" (\_ -> BI.compare bigInt bigInt)
+        , benchmark "one positive and one negative 32-digit number" (\_ -> BI.compare bigInt negativeBigInt)
         ]

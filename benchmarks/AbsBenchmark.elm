@@ -1,4 +1,4 @@
-module AbsBenchmark exposing (main, benchmark)
+module AbsBenchmark exposing (suite, main)
 
 import Benchmark exposing (..)
 import Benchmark.Runner exposing (BenchmarkProgram, program)
@@ -8,12 +8,12 @@ import BigInt as BI
 
 main : BenchmarkProgram
 main =
-    program benchmark
+    program suite
 
 
-benchmark : Benchmark
-benchmark =
+suite : Benchmark
+suite =
     describe "abs"
-        [ benchmark1 "positive 32-digit number" BI.abs bigInt
-        , benchmark1 "negative 32-digit number" BI.abs negativeBigInt
+        [ benchmark "positive 32-digit number" (\_ -> BI.abs bigInt)
+        , benchmark "negative 32-digit number" (\_ -> BI.abs negativeBigInt)
         ]

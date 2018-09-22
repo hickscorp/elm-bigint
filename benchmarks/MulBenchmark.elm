@@ -1,4 +1,4 @@
-module MulBenchmark exposing (main, benchmark)
+module MulBenchmark exposing (suite, main)
 
 import Benchmark exposing (..)
 import Benchmark.Runner exposing (BenchmarkProgram, program)
@@ -8,12 +8,12 @@ import BigInt as BI
 
 main : BenchmarkProgram
 main =
-    program benchmark
+    program suite
 
 
-benchmark : Benchmark
-benchmark =
+suite : Benchmark
+suite =
     describe "mul"
-        [ benchmark2 "positive 32-digit number by itself" BI.mul bigInt bigInt
-        , benchmark2 "negative 32-digit number by positive 32-digit number" BI.mul negativeBigInt bigInt
+        [ benchmark "positive 32-digit number by itself" (\_ -> BI.mul bigInt bigInt)
+        , benchmark "negative 32-digit number by positive 32-digit number" (\_ -> BI.mul negativeBigInt bigInt)
         ]

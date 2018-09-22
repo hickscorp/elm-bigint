@@ -1,4 +1,4 @@
-module ToStringBenchmark exposing (main, benchmark)
+module ToStringBenchmark exposing (suite, main)
 
 import Benchmark exposing (..)
 import Benchmark.Runner exposing (BenchmarkProgram, program)
@@ -8,11 +8,11 @@ import BigInt as BI
 
 main : BenchmarkProgram
 main =
-    program benchmark
+    program suite
 
 
-benchmark : Benchmark
-benchmark =
+suite : Benchmark
+suite =
     describe "toString"
-        [ benchmark1 "32-digit number" BI.mul bigInt
+        [ benchmark "32-digit number" (\_ -> BI.mul bigInt)
         ]

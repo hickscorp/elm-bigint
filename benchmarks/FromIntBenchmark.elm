@@ -1,4 +1,4 @@
-module FromIntBenchmark exposing (main, benchmark)
+module FromIntBenchmark exposing (suite, main)
 
 import Benchmark exposing (..)
 import Benchmark.Runner exposing (BenchmarkProgram, program)
@@ -7,11 +7,11 @@ import BigInt as BI
 
 main : BenchmarkProgram
 main =
-    program benchmark
+    program suite
 
 
-benchmark : Benchmark
-benchmark =
+suite : Benchmark
+suite =
     describe "fromInt"
-        [ benchmark1 "MAX_SAFE_INTEGER" BI.fromInt 9007199254740991
+        [ benchmark "MAX_SAFE_INTEGER" (\_ -> BI.fromInt 9007199254740991)
         ]

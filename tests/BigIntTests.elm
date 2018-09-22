@@ -1,14 +1,14 @@
-module BigIntTests exposing (..)
+module BigIntTests exposing (absTests, addTests, compareTests, divmodTests, fromTests, integer, isEvenTests, isOddTests, maxTests, minTests, minusOne, mulTests, negateTests, nonZeroInteger, one, powTests, singleNonZeroInteger, smallInt, smallPositiveIntegers, stringTests, subTests, tinyInt, tinyPositiveInt, zero)
 
 import BigInt exposing (..)
 import Constants exposing (maxDigitValue)
 import Expect
-import Fuzz exposing (Fuzzer, conditional, int, intRange, tuple)
+import Fuzz exposing (Fuzzer, int, intRange, tuple)
 import Hex
+import Maybe exposing (Maybe)
 import Random
 import String
 import Test exposing (..)
-import Maybe exposing (Maybe)
 
 
 integer : Fuzzer BigInt
@@ -28,6 +28,7 @@ singleNonZeroInteger =
             (\i ->
                 if i == zero then
                     one
+
                 else
                     i
             )
@@ -80,7 +81,7 @@ fromTests =
                     fromInt =
                         BigInt.fromInt 9999999
                 in
-                    Expect.equal fromString (Just fromInt)
+                Expect.equal fromString (Just fromInt)
         , test "fromString 10000000 = fromInt 10000000" <|
             \_ ->
                 let
@@ -90,7 +91,7 @@ fromTests =
                     fromInt =
                         BigInt.fromInt 10000000
                 in
-                    Expect.equal fromString (Just fromInt)
+                Expect.equal fromString (Just fromInt)
         , test "fromString 10000001 = fromInt 10000001" <|
             \_ ->
                 let
@@ -100,7 +101,7 @@ fromTests =
                     fromInt =
                         BigInt.fromInt 10000001
                 in
-                    Expect.equal fromString (Just fromInt)
+                Expect.equal fromString (Just fromInt)
         , test "fromString 0x2386f26fc10000 = mul (fromInt 100000000) (fromInt 100000000)" <|
             \_ ->
                 let
@@ -113,7 +114,7 @@ fromTests =
                     fromInt =
                         BigInt.mul midLargeInt midLargeInt
                 in
-                    Expect.equal fromString (Just fromInt)
+                Expect.equal fromString (Just fromInt)
         , test "fromString 0x0 = fromInt 0" <|
             \_ -> Expect.equal (BigInt.fromString "0x0") (Just <| BigInt.fromInt 0)
         , test "fromString -0x0 = fromInt 0" <|
@@ -159,18 +160,18 @@ negateTests =
                     y =
                         Basics.abs x
                 in
-                    fromInt y
-                        |> BigInt.negate
-                        |> Expect.equal (fromInt (-1 * y))
+                fromInt y
+                    |> BigInt.negate
+                    |> Expect.equal (fromInt (-1 * y))
         , fuzz int "negate (-x) = x; x >= 0" <|
             \x ->
                 let
                     y =
                         Basics.abs x * -1
                 in
-                    fromInt y
-                        |> BigInt.negate
-                        |> Expect.equal (fromInt (-1 * y))
+                fromInt y
+                    |> BigInt.negate
+                    |> Expect.equal (fromInt (-1 * y))
         , fuzz integer "negate (negate x) = x" <|
             \a ->
                 a
@@ -232,6 +233,7 @@ absTests =
             \x ->
                 if gte x zero then
                     Expect.equal (BigInt.abs x) x
+
                 else
                     Expect.equal (BigInt.abs x) (BigInt.negate x)
         ]
@@ -247,7 +249,7 @@ stringTests =
         , fuzz smallInt "match string formatting from core" <|
             \x ->
                 BigInt.toString (fromInt x)
-                    |> Expect.equal (Basics.toString x)
+                    |> Expect.equal (String.fromInt x)
         , fuzz integer "accept '+' at the beginning of the string" <|
             \x ->
                 let
@@ -256,9 +258,9 @@ stringTests =
                             |> BigInt.abs
                             |> BigInt.toString
                 in
-                    String.cons '+' y
-                        |> fromString
-                        |> Expect.equal (fromString y)
+                String.cons '+' y
+                    |> fromString
+                    |> Expect.equal (fromString y)
         , test "Basic toHexString" <|
             \_ ->
                 let
@@ -271,13 +273,13 @@ stringTests =
                     fromInt =
                         mul midLargeInt midLargeInt
                 in
-                    Expect.equal
-                        (Maybe.map toHexString fromString)
-                        (Just "2386f26fc10000")
+                Expect.equal
+                    (Maybe.andThen toHexString fromString)
+                    (Just "2386f26fc10000")
         , fuzz smallPositiveIntegers "Same results as rtfeldman/hex" <|
             \x ->
                 BigInt.toHexString (fromInt x)
-                    |> Expect.equal (Hex.toString x)
+                    |> Expect.equal (Just <| Hex.toString x)
         ]
 
 
@@ -338,7 +340,7 @@ isEvenTests : Test
 isEvenTests =
     describe "isEven"
         [ fuzz int "the `mod 2` of a number should be 0 if it is even" <|
-            \x -> Expect.equal (isEven (fromInt x)) ((x % 2) == 0)
+            \x -> Expect.equal (isEven (fromInt x)) ((modBy 2 x) == 0)
         ]
 
 
@@ -346,7 +348,7 @@ isOddTests : Test
 isOddTests =
     describe "isOdd"
         [ fuzz int "the `mod 2` of a number should be 1 if it is odd" <|
-            \x -> Expect.equal (isOdd (fromInt x)) ((x % 2) == 1)
+            \x -> Expect.equal (isOdd (fromInt x)) ((modBy 2 x) == 1)
         ]
 
 
