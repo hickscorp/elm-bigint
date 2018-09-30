@@ -1,4 +1,6 @@
-# bigint
+**Note:** The latest BigInt, for Elm 0.19, now lives [here](https://github.com/cmditch/elm-bigint)
+
+# bigint (elm 0.18)
 
 Elm's native integer type uses raw JavaScript integers which are limited in size ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER)). Sometimes, we want more.
 
